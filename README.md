@@ -9,23 +9,21 @@ Seu papel é construir uma RESTful API que permita:
 -   Detalhar Perfil do Usuário Logado
 -   Editar Perfil do Usuário Logado
 -   Listar categorias
--   Detalhar categoria
--   Cadastrar categoria
--   Editar categoria
--   Remover categoria
 -   Listar transações
 -   Detalhar transação
 -   Cadastrar transação
 -   Editar transação
 -   Remover transação
 -   Obter extrato de transações
--   Filtrar transações por categoria
+-   [Extra] Filtrar transações por categoria
 
 **Importante: Lembre-se sempre que cada usuário só pode ver e manipular seus próprios dados e suas próprias transações. Não atender a este pré-requisito é uma falha de segurança gravíssima!**
 
 **Importante 2: O diretório ".github" e seu conteúdo não podem ser alterados e muito menos excluídos**
 
 **Importante 3: Sempre que a validação de uma requisição falhar, responda com código de erro e mensagem adequada à situação, ok?**
+
+**Importante 4: O link de acesso a esta API se encontra no final deste README. Este link é somente para testes!**
 
 **Exemplo:**
 
@@ -49,7 +47,6 @@ Você precisa criar um Banco de Dados PostgreSQL chamado `dindin` contendo as se
     -   senha
 -   categorias
     -   id
-    -   usuario_id
     -   descricao
 -   transacoes
     -   id
@@ -61,6 +58,30 @@ Você precisa criar um Banco de Dados PostgreSQL chamado `dindin` contendo as se
     -   tipo
 
 **IMPORTANTE: Deverá ser criado no projeto o(s) arquivo(s) SQL que deverá ser o script que cria as tabelas corretamente.**
+
+As categorias a seguir precisam ser previamente cadastradas para que sejam listadas no endpoint de listagem das categorias.
+
+## **Categorias**
+
+-   Alimentação
+-   Assinaturas e Serviços
+-   Casa
+-   Mercado
+-   Cuidados Pessoais
+-   Educação
+-   Família
+-   Lazer
+-   Pets
+-   Presentes
+-   Roupas
+-   Saúde
+-   Transporte
+-   Salário
+-   Vendas
+-   Outras receitas
+-   Outras despesas
+
+**IMPORTANTE: Deverá ser criado no projeto o arquivo SQL que deverá ser o script de inserção das categorias acima na tabela.**
 
 ## **Requisitos obrigatórios**
 
@@ -311,12 +332,11 @@ Essa é a rota que será chamada quando o usuário quiser realizar alterações 
 }
 ```
 
-### **Listar categorias do usuário logado**
+### **Listar categorias**
 
 #### `GET` `/categoria`
 
-Essa é a rota que será chamada quando o usuario logado quiser listar todas as suas categorias cadastradas.  
-**Lembre-se:** Deverão ser retornadas **apenas** categorias associadas ao usuário logado, que deverá ser identificado através do ID presente no token de validação.
+Essa é a rota que será chamada quando o usuario logado quiser listar todas as categorias cadastradas.
 
 -   **Requisição**  
     Sem parâmetros de rota ou de query.  
@@ -327,8 +347,7 @@ Essa é a rota que será chamada quando o usuario logado quiser listar todas as 
     Em caso de **falha na validação**, a resposta deverá possuir **_status code_** apropriado, e em seu corpo (body) deverá possuir um objeto com uma propriedade **mensagem** que deverá possuir como valor um texto explicando o motivo da falha.
 
 -   **REQUISITOS OBRIGATÓRIOS**
-    -   O usuário deverá ser identificado através do ID presente no token de validação
-    -   O endpoint deverá responder com um array de todas as categorias associadas ao usuário. Caso não exista nenhuma categoria associada ao usuário deverá responder com array vazio.
+    -   O endpoint deverá responder com um array de todas as categorias cadastradas.
 
 #### **Exemplo de requisição**
 
@@ -341,202 +360,21 @@ Essa é a rota que será chamada quando o usuario logado quiser listar todas as 
 
 ```javascript
 // HTTP Status 200 / 201 / 204
-;[
+[
     {
         id: 1,
         descricao: "Roupas",
-        usuario_id: 1,
     },
     {
         id: 2,
         descricao: "Mercado",
-        usuario_id: 1,
     },
 ]
 ```
 
 ```javascript
 // HTTP Status 200 / 201 / 204
-;[]
-```
-
-### **Detalhar uma categoria do usuário logado**
-
-#### `GET` `/categoria/:id`
-
-Essa é a rota que será chamada quando o usuario logado quiser obter uma das suas categorias cadastradas.  
-**Lembre-se:** Deverá ser retornada **apenas** categoria associada ao usuário logado, que deverá ser identificado através do ID presente no token de validação.
-
--   **Requisição**  
-    Deverá ser enviado o ID da categoria no parâmetro de rota do endpoint.  
-    O corpo (body) da requisição não deverá possuir nenhum conteúdo.
-
--   **Resposta**  
-    Em caso de **sucesso**, o corpo (body) da resposta deverá possuir um objeto que representa a categoria encontrada, com todas as suas propriedades, conforme exemplo abaixo, acompanhado de **_status code_** apropriado.  
-    Em caso de **falha na validação**, a resposta deverá possuir **_status code_** apropriado, e em seu corpo (body) deverá possuir um objeto com uma propriedade **mensagem** que deverá possuir como valor um texto explicando o motivo da falha.
-
--   **REQUISITOS OBRIGATÓRIOS**
-    -   Validar se existe categoria para o id enviado como parâmetro na rota e se esta categoria pertence ao usuário logado.
-
-#### **Exemplo de requisição**
-
-```javascript
-// GET /categoria/2
-// Sem conteúdo no corpo (body) da requisição
-```
-
-#### **Exemplos de resposta**
-
-```javascript
-// HTTP Status 200 / 201 / 204
-{
-    "id": 2,
-    "descricao": "Mercado"
-    "usuario_id": 1,
-}
-```
-
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "Categoria não encontrada."
-}
-```
-
-### **Cadastrar categoria para o usuário logado**
-
-#### `POST` `/categoria`
-
-Essa é a rota que será utilizada para cadastrar uma categoria associada ao usuário logado.  
-**Lembre-se:** Deverá ser possível cadastrar **apenas** categorias associadas ao próprio usuário logado, que deverá ser identificado através do ID presente no token de validação.
-
--   **Requisição**  
-    Sem parâmetros de rota ou de query.  
-    O corpo (body) da requisição deverá possuir um objeto com a seguinte propriedade (respeitando este nome):
-
-    -   descricao
-
--   **Resposta**
-    Em caso de **sucesso**, deveremos enviar, no corpo (body) da resposta, as informações da categoria cadastrada, incluindo seu respectivo `id`.  
-    Em caso de **falha na validação**, a resposta deverá possuir **_status code_** apropriado, e em seu corpo (body) deverá possuir um objeto com uma propriedade **mensagem** que deverá possuir como valor um texto explicando o motivo da falha.
-
--   **REQUISITOS OBRIGATÓRIOS**
-    -   Validar o campo obrigatório:
-        -   descricao
-    -   Cadastrar a categoria associada ao usuário logado.
-
-#### **Exemplo de requisição**
-
-```javascript
-// POST /categoria
-{
-    "descricao": "Mercado"
-}
-```
-
-#### **Exemplos de resposta**
-
-```javascript
-// HTTP Status 200 / 201 / 204
-{
-    "id": 2,
-    "descricao": "Mercado"
-    "usuario_id": 1,
-}
-```
-
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "A descrição da categoria deve ser informada."
-}
-```
-
-### **Atualizar categoria do usuário logado**
-
-#### `PUT` `/categoria/:id`
-
-Essa é a rota que será chamada quando o usuario logado quiser atualizar uma das suas categorias cadastradas.  
-**Lembre-se:** Deverá ser possível atualizar **apenas** categorias associadas ao próprio usuário logado, que deverá ser identificado através do ID presente no token de validação.
-
--   **Requisição**  
-    Deverá ser enviado o ID da categoria no parâmetro de rota do endpoint.  
-    O corpo (body) da requisição deverá possuir um objeto com a seguinte propriedade (respeitando este nome):
-
-    -   descricao
-
--   **Resposta**  
-    Em caso de **sucesso**, não deveremos enviar conteúdo no corpo (body) da resposta.  
-    Em caso de **falha na validação**, a resposta deverá possuir **_status code_** apropriado, e em seu corpo (body) deverá possuir um objeto com uma propriedade **mensagem** que deverá possuir como valor um texto explicando o motivo da falha.
-
--   **REQUISITOS OBRIGATÓRIOS**
-    -   Validar se existe categoria para o id enviado como parâmetro na rota e se esta categoria pertence ao usuário logado.
-    -   Validar os campos obrigatórios:
-        -   descricao
-    -   Atualizar a categoria no banco de dados
-
-#### **Exemplo de requisição**
-
-```javascript
-// PUT /categoria/2
-{
-    "descricao": "Presentes"
-}
-```
-
-#### **Exemplos de resposta**
-
-```javascript
-// HTTP Status 200 / 201 / 204
-// Sem conteúdo no corpo (body) da resposta
-```
-
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "A descrição da categoria deve ser informada."
-}
-```
-
-### **Excluir categoria do usuário logado**
-
-#### `DELETE` `/categoria/:id`
-
-Essa é a rota que será chamada quando o usuario logado quiser excluir uma das suas categorias cadastradas.  
-**Lembre-se:** Deverá ser possível excluir **apenas** categorias associadas ao próprio usuário logado, que deverá ser identificado através do ID presente no token de validação.
-
--   **Requisição**  
-    Deverá ser enviado o ID da categoria no parâmetro de rota do endpoint.  
-    O corpo (body) da requisição não deverá possuir nenhum conteúdo.
-
--   **Resposta**  
-    Em caso de **sucesso**, não deveremos enviar conteúdo no corpo (body) da resposta.  
-    Em caso de **falha na validação**, a resposta deverá possuir **_status code_** apropriado, e em seu corpo (body) deverá possuir um objeto com uma propriedade **mensagem** que deverá possuir como valor um texto explicando o motivo da falha.
-
--   **REQUISITOS OBRIGATÓRIOS**:
-    -   Validar se existe categoria para o id enviado como parâmetro na rota e se esta categoria pertence ao usuário logado.
-    -   Validar se existe alguma transação associada a esta categoria. Caso exista, não deverá ser permitido a exclusão
-    -   Excluir a categoria no banco de dados.
-
-#### **Exemplo de requisição**
-
-```javascript
-// DELETE /categoria/2
-// Sem conteúdo no corpo (body) da requisição
-```
-
-#### **Exemplos de resposta**
-
-```javascript
-// HTTP Status 200 / 201 / 204
-// Sem conteúdo no corpo (body) da resposta
-```
-
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "Categoria não encontrada."
-}
+[]
 ```
 
 ### **Listar transações do usuário logado**
@@ -569,7 +407,7 @@ Essa é a rota que será chamada quando o usuario logado quiser listar todas as 
 
 ```javascript
 // HTTP Status 200 / 201 / 204
-;[
+[
     {
         id: 1,
         tipo: "saida",
@@ -595,7 +433,7 @@ Essa é a rota que será chamada quando o usuario logado quiser listar todas as 
 
 ```javascript
 // HTTP Status 200 / 201 / 204
-;[]
+[]
 ```
 
 ### **Detalhar uma transação do usuário logado**
@@ -674,7 +512,7 @@ Essa é a rota que será utilizada para cadastrar uma transação associada ao u
         -   data
         -   categoria_id
         -   tipo
-    -   Validar se existe categoria para o id enviado no corpo (body) da requisição e se esta categoria pertence ao usuário logado.
+    -   Validar se existe categoria para o id enviado no corpo (body) da requisição.
     -   Validar se o tipo enviado no corpo (body) da requisição corresponde a palavra `entrada` ou `saida`, exatamente como descrito.
     -   Cadastrar a transação associada ao usuário logado.
 
@@ -743,7 +581,7 @@ Essa é a rota que será chamada quando o usuario logado quiser atualizar uma da
         -   data
         -   categoria_id
         -   tipo
-    -   Validar se existe categoria para o id enviado no corpo (body) da requisição e se esta categoria pertence ao usuário logado.
+    -   Validar se existe categoria para o id enviado no corpo (body) da requisição.
     -   Validar se o tipo enviado no corpo (body) da requisição corresponde a palavra `entrada` ou `saida`, exatamente como descrito.
     -   Atualizar a transação no banco de dados
 
@@ -854,9 +692,14 @@ Essa é a rota que será chamada quando o usuario logado quiser obter o extrato 
 
 ---
 
+## **EXTRA**
+
+**ATENÇÃO!:** Esta parte extra não é obrigatória e recomendamos que seja feita apenas quando terminar toda a parte obrigatória acima.
+
 ### **Filtrar transações por categoria**
 
-Na funcionalidade de listagem de transações do usuário logado (**GET /transacao**), deveremos incluir um parâmetro do tipo query **filtro** para que seja possível consultar apenas transações das categorias informadas.  
+Na funcionalidade de listagem de transações do usuário logado (**GET /transacao**), deveremos incluir um parâmetro do tipo query **filtro** para que seja possível consultar apenas transações das categorias informadas.
+
 **Lembre-se:** Deverão ser retornadas **apenas** transações associadas ao usuário logado, que deverá ser identificado através do ID presente no token de validação.
 
 -   **Requisição**  
@@ -875,7 +718,7 @@ Na funcionalidade de listagem de transações do usuário logado (**GET /transac
 #### **Exemplo de requisição**
 
 ```javascript
-// GET /produtos?filtro[]=roupas&filtro[]=salários
+// GET /transacao?filtro[]=roupas&filtro[]=salários
 // Sem conteúdo no corpo (body) da requisição
 ```
 
@@ -883,7 +726,7 @@ Na funcionalidade de listagem de transações do usuário logado (**GET /transac
 
 ```javascript
 // HTTP Status 200 / 201 / 204
-;[
+[
     {
         id: 1,
         tipo: "saida",
@@ -909,8 +752,14 @@ Na funcionalidade de listagem de transações do usuário logado (**GET /transac
 
 ```javascript
 // HTTP Status 200 / 201 / 204
-;[]
+[]
 ```
+
+---
+
+Link do deploy da API somente para testes: [ link](https://desafio-backend-03-dindin.pedagogico.cubos.academy/)
+
+**Este link é somente para testes (ou seja, será possível realizar requisições a esta API através deste link)**
 
 ---
 
