@@ -19,11 +19,9 @@ Seu papel é construir uma RESTful API que permita:
 
 **Importante: Lembre-se sempre que cada usuário só pode ver e manipular seus próprios dados e suas próprias transações. Não atender a este pré-requisito é uma falha de segurança gravíssima!**
 
-**Importante 2: O diretório ".github" e seu conteúdo não podem ser alterados e muito menos excluídos**
+**Importante 2: Sempre que a validação de uma requisição falhar, responda com código de erro e mensagem adequada à situação, ok?**
 
-**Importante 3: Sempre que a validação de uma requisição falhar, responda com código de erro e mensagem adequada à situação, ok?**
-
-**Importante 4: O link de acesso a esta API se encontra no final deste README. Este link é somente para testes!**
+**Importante 3: O link de acesso a esta API se encontra no final deste README. Este link é somente para testes!**
 
 **Exemplo:**
 
