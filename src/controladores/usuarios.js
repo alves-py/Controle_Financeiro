@@ -1,5 +1,5 @@
-const {criptografarSenha} = require(`./criptografarsenha`)
-const conexãoDoBanco = require(`./bancoDeDados`);
+const {criptografarSenha} = require(`../utils/criptografia`)
+const conexãoDoBanco = require(`../bancoDeDados/conexaoDB`);
 
 const cadastrarUsuario = async (req, res) => {
     const { nome, senha, email } = req.body

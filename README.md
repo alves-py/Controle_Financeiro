@@ -1,7 +1,8 @@
 ![](https://i.imgur.com/xG74tOh.png)
 
 # Desafio Módulo 3 - Backend
-dupla Gustavo Henrique e Felipe Alves
+Dupla Gustavo Henrique e Felipe Alves
+
 Seu papel é construir uma RESTful API que permita:
 
 -   Cadastrar Usuário
