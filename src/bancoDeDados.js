@@ -4,7 +4,8 @@ const conexãoDoBanco = new Pool({
     user: `postgres`,
     host: `localhost`,
     database: `dindin`,
-    password: `bwk><123`,
+    //password: `bwk><1`,
+    password: `postgres`,
     port: 5432,
 });
 

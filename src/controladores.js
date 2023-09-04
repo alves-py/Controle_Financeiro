@@ -1,4 +1,4 @@
-const criptografarSenha = require(`./criptografarsenha`)
+const {criptografarSenha} = require(`./criptografarsenha`)
 const conexãoDoBanco = require(`./bancoDeDados`);
 
 const cadastrarUsuario = async (req, res) => {
@@ -8,7 +8,7 @@ const cadastrarUsuario = async (req, res) => {
     }
     try {
         const senhaCriptografada = await criptografarSenha(senha);
-        query = `insert into usuarios (nome,email,senha) values($1,$2,$3)  returning *`;
+        const query = `insert into usuarios (nome,email,senha) values($1,$2,$3)  returning *`;
         const values = [nome, email, senhaCriptografada];
         const { rows: usuariosCadastrados } = await conexãoDoBanco.query(query, values);
         const usuarioCadastro = usuariosCadastrados[0];
