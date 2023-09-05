@@ -6,9 +6,6 @@ const conexaoDoBanco = require(`../bancoDeDados/conexaoDB`);
 
 const cadastrarUsuario = async (req, res) => {
     const { nome, senha, email } = req.body
-    if (!senha || !nome || !email) {
-        return res.status(400).json({ mensagem: "todos os campos são obrigatorios" });
-    }
     try {
         const emailExistente = await verificarEmailExistente(email);
         if (emailExistente) {
