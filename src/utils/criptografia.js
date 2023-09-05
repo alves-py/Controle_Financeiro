@@ -9,6 +9,11 @@ const criptografarSenha = async (senha) => {
     }
 };
 
+const compararSenha = async (senha, hash) => {
+    return await bcrypt.compare(senha, hash)
+};
+
 module.exports = {
-    criptografarSenha
+    criptografarSenha,
+    compararSenha
 };

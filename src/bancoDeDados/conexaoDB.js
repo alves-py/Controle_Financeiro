@@ -1,6 +1,6 @@
 const { Pool } = require(`pg`);
 
-const conexãoDoBanco = new Pool({
+const conexaoDoBanco = new Pool({
     user: `postgres`,
     host: `localhost`,
     database: `dindin`,
@@ -9,4 +9,4 @@ const conexãoDoBanco = new Pool({
     port: 5432,
 });
 
-module.exports = conexãoDoBanco
+module.exports = conexaoDoBanco
