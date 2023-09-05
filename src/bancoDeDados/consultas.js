@@ -14,8 +14,14 @@ const buscarHash = async (email) => {
     return rows[0];
 }
 
+const verificarId = async (id) => {
+    const query = "SELECT * FROM usuarios WHERE id = $1";
+    const values = [id];
+    return { rows, rowCount } = await conexaoDoBanco.query(query, values);
+}
 
 module.exports = {
     verificarEmailExistente,
-    buscarHash
+    buscarHash,
+    verificarId
 }

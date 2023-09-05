@@ -5,6 +5,16 @@ CREATE TABLE usuarios (
     email VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE transacoes(
+		id SERIAL PRIMARY KEY,
+  	descricao text,
+  	valor INT NOT NULL,
+    data TIMESTAMPTZ,
+  	categoria_id INT REFERENCES categorias(id) NOT NULL,
+  	usuario_id INT REFERENCES usuarios(id) NOT NULL,
+  	tipo text
+);
+
 CREATE TABLE categorias (
 		id SERIAL PRIMARY KEY,
   	descricao text not null
