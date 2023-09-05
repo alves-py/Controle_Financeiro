@@ -1,12 +1,7 @@
 const bcrypt = require(`bcrypt`);
 
 const criptografarSenha = async (senha) => {
-    try {
-        const senhaCriptografada = await bcrypt.hash(senha, 10);
-        return senhaCriptografada;
-    } catch (error) {
-        throw error;
-    }
+    return await bcrypt.hash(senha, 10);
 };
 
 const compararSenha = async (senha, hash) => {
