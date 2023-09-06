@@ -4,7 +4,7 @@
   "description": "![](https://i.imgur.com/xG74tOh.png)",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./desafio03/src/index.js"
   },
   "keywords": [],
   "author": "",

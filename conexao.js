@@ -1,9 +1,9 @@
 const express = require('express');
-const rota = require(`./rotas`)
+const rotas = require(`./src/rotas`)
 
 const app = express();
 
 app.use(express.json());
-app.use(rota)
+app.use(rotas)
 
 module.exports = app;
