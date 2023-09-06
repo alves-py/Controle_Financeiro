@@ -20,8 +20,13 @@ const verificarId = async (id) => {
     return { rows, rowCount } = await conexaoDoBanco.query(query, values);
 }
 
+const buscarCategorias = async () => {
+    return await conexaoDoBanco.query("SELECT * FROM categorias");
+}
+
 module.exports = {
     verificarEmailExistente,
     buscarHash,
-    verificarId
+    verificarId,
+    buscarCategorias
 }
