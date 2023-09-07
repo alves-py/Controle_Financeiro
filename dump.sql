@@ -6,7 +6,7 @@ CREATE TABLE usuarios (
 );
 
 CREATE TABLE transacoes(
-		id SERIAL PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
   	descricao text,
   	valor INT NOT NULL,
     data TIMESTAMPTZ,

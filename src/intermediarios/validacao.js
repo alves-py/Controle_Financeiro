@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const senhaJwt = require('../utils/senhaJwt');
-const { verificarId } = require('../bancoDeDados/consultas');
+const { verificarId, totalCategorias } = require('../bancoDeDados/consultas');
 
 const validarNomeEmailSenha = (req, res, next) => {
     const { nome, senha, email } = req.body
@@ -34,8 +34,27 @@ const validarToken =async (req, res, next) => {
     };
 };
 
+const validarTransacao = async (req, res, next) => {
+    const { descricao, valor, data, categoria_id, tipo } = req.body
+    if (!descricao || !valor || !data || !categoria_id || !tipo) {
+        return res.status(400).json({ mensagem: "todos os campos são obrigatorios" });
+    }
+    const totalCategoriasValor = await totalCategorias();
+
+
+    if(categoria_id > totalCategoriasValor){
+        return res.status(400).json({mensagem: "categoria_id invalida. "});
+    }
+    if (tipo !== "entrada" && tipo !== "saida") {
+        return res.status(400).json({ mensagem: "tipo inválido." });
+    }
+
+    next();
+}
+
 
 module.exports = {
     validarNomeEmailSenha,
-    validarToken
+    validarToken,
+    validarTransacao
 }
