@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const senhaJwt = require('../utils/senhaJwt');
-const { verificarId, totalCategorias } = require('../bancoDeDados/consultas');
+const { verificarId, totalCategorias, totalTransacoes, buscarUsuario_id } = require('../bancoDeDados/consultas');
 
 const validarNomeEmailSenha = (req, res, next) => {
     const { nome, senha, email } = req.body
@@ -36,6 +36,9 @@ const validarToken =async (req, res, next) => {
 
 const validarTransacao = async (req, res, next) => {
     const { descricao, valor, data, categoria_id, tipo } = req.body
+    const { id } = req.params;
+    const { id: idUsuario } = req.usuario;
+
     if (!descricao || !valor || !data || !categoria_id || !tipo) {
         return res.status(400).json({ mensagem: "todos os campos são obrigatorios" });
     }
@@ -47,6 +50,18 @@ const validarTransacao = async (req, res, next) => {
     }
     if (tipo !== "entrada" && tipo !== "saida") {
         return res.status(400).json({ mensagem: "tipo inválido." });
+    }
+
+    if( id ){
+        const { rows, rowCount } = await buscarUsuario_id( id );
+        if( rowCount > 0 ){
+            if ( idUsuario != rows[0].usuario_id ) {
+                return res.status(400).json({ mensagem: "Está transação não pertence ao usuário logado" });
+            }
+        }
+        if ( rowCount === 0){
+            return res.status(400).json({ mensagem: "Transação não encontrada" });
+        }
     }
 
     next();

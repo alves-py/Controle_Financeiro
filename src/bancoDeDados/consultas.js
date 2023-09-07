@@ -37,6 +37,15 @@ const totalCategorias = async () => {
     return parseInt(resultado.rows[0].count);
 }
 
+const buscarUsuario_id = async (idTransacao) => {
+    return await conexaoDoBanco.query('SELECT usuario_id FROM transacoes WHERE id = $1', [idTransacao]);
+}
+
+const totalTransacoes = async () => {
+    const resultado = await conexaoDoBanco.query('SELECT count(id) FROM transacoes;');
+    return parseInt(resultado.rows[0].count);
+}
+
 module.exports = {
     verificarEmailExistente,
     buscarHash,
@@ -44,5 +53,7 @@ module.exports = {
     buscarCategorias,
     buscarTransacoesUsuario,
     buscarTransacaoId,
-    totalCategorias
+    totalCategorias,
+    buscarUsuario_id,
+    totalTransacoes,
 }
