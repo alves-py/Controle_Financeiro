@@ -91,7 +91,7 @@ const deletarTransacao = async (req, res) => {
 
 const extratoTransacao = async (req, res) => {
     const { id: idUsuario} = req.usuario;
-
+try{
     const { rows, rowCount } = await buscarTransacoesUsuario( idUsuario );
     const listaEntrada = rows.filter( transacao => transacao.tipo === "entrada");
     const listaSaida = rows.filter( transacao => transacao.tipo === "saida");
@@ -101,6 +101,9 @@ const extratoTransacao = async (req, res) => {
 
     return res.status(200).json({entrada: totalEntrada,
     saida: totalSaida});
+} catch{
+    return res.status(500).json({ mensagem: "Erro interno no servidor" });
+}
 
 };
 
